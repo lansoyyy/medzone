@@ -1,29 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:medzone/screens/auth/signup_screen3.dart';
+import 'package:medzone/screens/auth/login_screen.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
 import 'package:medzone/widgets/textfield_widget.dart';
 
-class SignupScreen2 extends StatefulWidget {
-  const SignupScreen2({super.key});
+class SignupScreen3 extends StatefulWidget {
+  var firstnameController = TextEditingController();
+  var middlenameController = TextEditingController();
+  var lastnameController = TextEditingController();
+  var nicknameController = TextEditingController();
+  var suffixController = TextEditingController();
+  var dateController = TextEditingController();
+
+  String selectedSex = 'Male';
+  String selectedGender = 'Male';
+
+  SignupScreen3(
+      {super.key,
+      required this.firstnameController,
+      required this.middlenameController,
+      required this.lastnameController,
+      required this.nicknameController,
+      required this.suffixController,
+      required this.dateController,
+      required this.selectedSex,
+      required this.selectedGender});
 
   @override
-  State<SignupScreen2> createState() => _SignupScreen2State();
+  State<SignupScreen3> createState() => _SignupScreen3State();
 }
 
-class _SignupScreen2State extends State<SignupScreen2> {
-  final firstnameController = TextEditingController();
-  final middlenameController = TextEditingController();
-  final lastnameController = TextEditingController();
-  final nicknameController = TextEditingController();
-  final suffixController = TextEditingController();
-  final dateController = TextEditingController();
-
-  String selectedSex = 'Male'; // Default selected sex
-  String selectedGender = 'Male'; // Default selected gender
-
+class _SignupScreen3State extends State<SignupScreen3> {
   final List<String> sexList = ['Male', 'Female', 'Other'];
   final List<String> genderList = ['Male', 'Female', 'Non-binary', 'Other'];
 
@@ -49,7 +58,7 @@ class _SignupScreen2State extends State<SignupScreen2> {
                       ),
                     ),
                     TextWidget(
-                      text: 'Personal Information',
+                      text: 'Review Personal Information',
                       fontSize: 16,
                       fontFamily: 'Bold',
                     ),
@@ -69,9 +78,10 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 ),
                 Center(
                   child: TextFieldWidget(
+                    isEnabled: false,
                     label: 'First Name',
                     hintColor: Colors.black,
-                    controller: firstnameController,
+                    controller: widget.firstnameController,
                   ),
                 ),
                 const SizedBox(
@@ -79,9 +89,10 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 ),
                 Center(
                   child: TextFieldWidget(
+                    isEnabled: false,
                     label: 'Middle Name',
                     hintColor: Colors.black,
-                    controller: middlenameController,
+                    controller: widget.middlenameController,
                   ),
                 ),
                 const SizedBox(
@@ -89,9 +100,10 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 ),
                 Center(
                   child: TextFieldWidget(
+                    isEnabled: false,
                     label: 'Last Name',
                     hintColor: Colors.black,
-                    controller: lastnameController,
+                    controller: widget.lastnameController,
                   ),
                 ),
                 const SizedBox(
@@ -99,9 +111,10 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 ),
                 Center(
                   child: TextFieldWidget(
+                    isEnabled: false,
                     label: 'Nickname',
                     hintColor: Colors.black,
-                    controller: nicknameController,
+                    controller: widget.nicknameController,
                   ),
                 ),
                 const SizedBox(
@@ -109,9 +122,10 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 ),
                 Center(
                   child: TextFieldWidget(
+                    isEnabled: false,
                     label: 'Suffix (Jr., I, II, III, Sr.)',
                     hintColor: Colors.black,
-                    controller: suffixController,
+                    controller: widget.suffixController,
                   ),
                 ),
                 const SizedBox(
@@ -173,7 +187,7 @@ class _SignupScreen2State extends State<SignupScreen2> {
                                 fontSize: 14,
                                 color: Colors.grey,
                               ),
-                              hintText: dateController.text,
+                              hintText: widget.dateController.text,
                               border: InputBorder.none,
                               disabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -209,7 +223,7 @@ class _SignupScreen2State extends State<SignupScreen2> {
                               ),
                             ),
 
-                            controller: dateController,
+                            controller: widget.dateController,
                             // Pass the validator to the TextFormField
                           ),
                         ),
@@ -232,10 +246,10 @@ class _SignupScreen2State extends State<SignupScreen2> {
                           fontSize: 14,
                         ),
                         DropdownButton<String>(
-                          value: selectedSex,
+                          value: widget.selectedSex,
                           onChanged: (newValue) {
                             setState(() {
-                              selectedSex = newValue!;
+                              widget.selectedSex = newValue!;
                             });
                           },
                           items: sexList
@@ -261,10 +275,10 @@ class _SignupScreen2State extends State<SignupScreen2> {
                           fontSize: 14,
                         ),
                         DropdownButton<String>(
-                          value: selectedGender,
+                          value: widget.selectedGender,
                           onChanged: (newValue) {
                             setState(() {
-                              selectedGender = newValue!;
+                              widget.selectedGender = newValue!;
                             });
                           },
                           items: genderList
@@ -284,18 +298,21 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 ),
                 Center(
                   child: ButtonWidget(
-                    label: 'Next',
+                    label: 'Go back and edit',
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SignupScreen3(
-                              firstnameController: firstnameController,
-                              middlenameController: middlenameController,
-                              lastnameController: lastnameController,
-                              nicknameController: nicknameController,
-                              suffixController: suffixController,
-                              dateController: dateController,
-                              selectedSex: selectedSex,
-                              selectedGender: selectedGender)));
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: ButtonWidget(
+                    label: 'Signup',
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
                     },
                   ),
                 ),
@@ -333,7 +350,7 @@ class _SignupScreen2State extends State<SignupScreen2> {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
 
       setState(() {
-        dateController.text = formattedDate;
+        widget.dateController.text = formattedDate;
       });
     } else {
       return null;
