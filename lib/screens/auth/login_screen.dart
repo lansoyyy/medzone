@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medzone/screens/auth/signup_screen.dart';
+import 'package:medzone/screens/home_screen.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
@@ -191,8 +192,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ButtonWidget(
                     label: 'Sign In',
                     onPressed: () {
-                      // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      //     builder: (context) => const LoginScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
                     },
                   ),
                 ),
