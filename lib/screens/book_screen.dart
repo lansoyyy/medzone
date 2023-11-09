@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:medzone/screens/summary_screen.dart';
 import 'package:medzone/widgets/text_widget.dart';
 import 'package:medzone/widgets/textfield_widget.dart';
 
@@ -340,7 +341,7 @@ class _BookScreenState extends State<BookScreen> {
                     label: 'Book',
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const BookScreen()));
+                          builder: (context) => const SummaryScreen()));
                     },
                   ),
                 ),
