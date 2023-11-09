@@ -9,6 +9,8 @@ class TextWidget extends StatelessWidget {
   final bool? isItalize;
   final bool? isBold;
 
+  final TextAlign? align;
+
   TextWidget(
       {super.key,
       this.decoration,
@@ -16,6 +18,7 @@ class TextWidget extends StatelessWidget {
       this.isBold = false,
       required this.text,
       required this.fontSize,
+      this.align = TextAlign.center,
       this.color = Colors.black,
       this.fontFamily = 'Regular'});
 
@@ -23,7 +26,7 @@ class TextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      textAlign: TextAlign.center,
+      textAlign: align,
       style: TextStyle(
           fontStyle: isItalize! ? FontStyle.italic : null,
           decoration: decoration,

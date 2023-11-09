@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medzone/screens/doctor_profile_screen.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/text_widget.dart';
 
@@ -152,49 +153,56 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (int i = 0; i < 10; i++)
                         Padding(
                           padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Container(
-                            height: 175,
-                            width: 125,
-                            decoration: BoxDecoration(
-                              color: primary.withOpacity(0.25),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/doc1.png',
-                                  width: 75,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                TextWidget(
-                                  text: '☆ 5.0',
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                TextWidget(
-                                  text: 'Dr. John Rivera',
-                                  fontSize: 12,
-                                  fontFamily: 'Bold',
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                TextWidget(
-                                  text: 'Neurologist',
-                                  fontSize: 12,
-                                  fontFamily: 'Medium',
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                              ],
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const DoctorProfileScreen()));
+                            },
+                            child: Container(
+                              height: 175,
+                              width: 125,
+                              decoration: BoxDecoration(
+                                color: primary.withOpacity(0.25),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/doc1.png',
+                                    width: 75,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  TextWidget(
+                                    text: '☆ 5.0',
+                                    fontSize: 10,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  TextWidget(
+                                    text: 'Dr. John Rivera',
+                                    fontSize: 12,
+                                    fontFamily: 'Bold',
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  TextWidget(
+                                    text: 'Neurologist',
+                                    fontSize: 12,
+                                    fontFamily: 'Medium',
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
