@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medzone/screens/book_screen.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
@@ -324,7 +325,10 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                   child: ButtonWidget(
                     radius: 100,
                     label: 'Book an Appointment',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const BookScreen()));
+                    },
                   ),
                 ),
                 const SizedBox(
