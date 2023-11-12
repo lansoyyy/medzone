@@ -3,14 +3,14 @@ import 'package:medzone/screens/doctor_profile_screen.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/text_widget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeTab extends StatefulWidget {
+  const HomeTab({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeTabState extends State<HomeTab> {
   final searchController = TextEditingController();
   String nameSearched = '';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medzone/screens/home_screen.dart';
+import 'package:medzone/screens/home_tab.dart';
 import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
 import 'package:medzone/widgets/toast_widget.dart';
@@ -223,7 +223,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     onPressed: () {
                       showToast('You have successfully booked a consultation!');
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
+                          builder: (context) => const HomeTab()));
                     },
                   ),
                 ),
