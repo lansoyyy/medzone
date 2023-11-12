@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medzone/screens/auth/signup_screen.dart';
+import 'package:medzone/screens/home_screen.dart';
 import 'package:medzone/screens/home_tab.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/button_widget.dart';
@@ -193,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     label: 'Sign In',
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomeTab()));
+                          builder: (context) => const HomeScreen()));
                     },
                   ),
                 ),
