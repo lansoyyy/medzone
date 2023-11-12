@@ -17,9 +17,9 @@ class _SignupScreen2State extends State<SignupScreen2> {
   final firstnameController = TextEditingController();
   final middlenameController = TextEditingController();
   final lastnameController = TextEditingController();
+  final dateController = TextEditingController();
   final nicknameController = TextEditingController();
   final suffixController = TextEditingController();
-  final dateController = TextEditingController();
 
   String selectedSex = 'Male'; // Default selected sex
   String selectedGender = 'Male'; // Default selected gender

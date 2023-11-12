@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medzone/screens/appointments_tab.dart';
 import 'package:medzone/screens/history_tab.dart';
 import 'package:medzone/screens/home_tab.dart';
+import 'package:medzone/screens/profile_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const HomeTab(),
     const AppointmentsTab(),
     const HistoryTab(),
-    const SizedBox(),
+    const ProfileTab(),
   ];
 
   @override
