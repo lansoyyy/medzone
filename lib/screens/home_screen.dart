@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medzone/screens/appointments_tab.dart';
 import 'package:medzone/screens/home_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> children = [
     const HomeTab(),
-    const SizedBox(),
+    const AppointmentsTab(),
     const SizedBox(),
     const SizedBox(),
   ];
