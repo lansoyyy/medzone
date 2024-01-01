@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medzone/widgets/text_widget.dart';
+
+import '../utils/colors.dart';
 
 class AppointmentsTab extends StatelessWidget {
   const AppointmentsTab({super.key});
@@ -49,58 +52,119 @@ class AppointmentsTab extends StatelessWidget {
                   child: TabBarView(
                     children: [
                       for (int i = 0; i < 3; i++)
-                        ListView.builder(
-                          itemBuilder: (context, index) {
-                            return Card(
-                              child: SizedBox(
-                                height: 150,
-                                width: 400,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/doc1.png',
-                                      height: 100,
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        TextWidget(
-                                          text: 'Dr. John Rivera',
-                                          fontSize: 14,
-                                          fontFamily: 'Bold',
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        TextWidget(
-                                          text: 'Neurologist',
-                                          fontSize: 12,
-                                          fontFamily: 'Regular',
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        TextWidget(
-                                          text: 'October 25, 2023 at 5:30pm',
-                                          fontSize: 12,
-                                          fontFamily: 'Medium',
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('Bookings')
+                                .where('status',
+                                    isEqualTo: i == 0
+                                        ? 'Pending'
+                                        : i == 1
+                                            ? 'Completed'
+                                            : 'Cancelled')
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                print(snapshot.error);
+                                return const Center(child: Text('Error'));
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(top: 50),
+                                  child: Center(
+                                      child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                  )),
+                                );
+                              }
+
+                              final data = snapshot.requireData;
+                              return ListView.builder(
+                                itemCount: data.docs.length,
+                                itemBuilder: (context, index) {
+                                  return StreamBuilder<DocumentSnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('Doctors')
+                                          .doc(data.docs[index]['doctorid'])
+                                          .snapshots(),
+                                      builder: (context,
+                                          AsyncSnapshot<DocumentSnapshot>
+                                              snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const SizedBox();
+                                        } else if (snapshot.hasError) {
+                                          return const Center(
+                                              child:
+                                                  Text('Something went wrong'));
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const SizedBox();
+                                        }
+                                        dynamic doctor = snapshot.data;
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, bottom: 10),
+                                          child: Container(
+                                            height: 150,
+                                            width: 125,
+                                            decoration: BoxDecoration(
+                                              color: primary.withOpacity(0.25),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.network(
+                                                  doctor['profilePicture'],
+                                                  height: 100,
+                                                ),
+                                                const SizedBox(
+                                                  width: 30,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextWidget(
+                                                      text:
+                                                          'Dr. ${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
+                                                      fontSize: 14,
+                                                      fontFamily: 'Bold',
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    TextWidget(
+                                                      text: doctor['type'],
+                                                      fontSize: 12,
+                                                      fontFamily: 'Regular',
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    TextWidget(
+                                                      text:
+                                                          '${data.docs[index]['date']} || ${data.docs[index]['time']}',
+                                                      fontSize: 12,
+                                                      fontFamily: 'Medium',
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                },
+                              );
+                            }),
                     ],
                   ),
                 ),
