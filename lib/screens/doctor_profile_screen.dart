@@ -76,20 +76,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                               fontFamily: 'Regular',
                             ),
                             const SizedBox(
-                              height: 5,
-                            ),
-                            TextWidget(
-                              text: 'October 25, 2023 at 5:30pm',
-                              fontSize: 12,
-                              fontFamily: 'Medium',
-                            ),
-                            const SizedBox(
                               height: 10,
-                            ),
-                            TextWidget(
-                              text: 'Starts in 7 days',
-                              fontSize: 12,
-                              fontFamily: 'Medium',
                             ),
                           ],
                         ),
