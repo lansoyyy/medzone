@@ -182,23 +182,6 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                   height: 10,
                 ),
                 TextWidget(
-                  text: 'Working Time',
-                  fontSize: 18,
-                  fontFamily: 'Bold',
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                TextWidget(
-                  align: TextAlign.start,
-                  text: 'Monday - Friday, 08:00AM - 05:00PM',
-                  fontSize: 12,
-                  fontFamily: 'Regular',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextWidget(
                   text: 'Reviews',
                   fontSize: 18,
                   fontFamily: 'Bold',
