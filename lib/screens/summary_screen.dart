@@ -1,11 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:medzone/screens/home_tab.dart';
+import 'package:medzone/services/add_booking.dart';
 import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
 import 'package:medzone/widgets/toast_widget.dart';
 
 class SummaryScreen extends StatefulWidget {
-  const SummaryScreen({super.key});
+  var doctor;
+
+  String name;
+  String gender;
+  String age;
+  String problem;
+  String date;
+  String time;
+
+  SummaryScreen(
+      {super.key,
+      required this.doctor,
+      required this.name,
+      required this.gender,
+      required this.age,
+      required this.problem,
+      required this.date,
+      required this.time});
 
   @override
   State<SummaryScreen> createState() => _SummaryScreenState();
@@ -34,7 +52,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       ),
                     ),
                     TextWidget(
-                      text: 'Dr. John Rivera',
+                      text:
+                          'Dr. ${widget.doctor['fname']} ${widget.doctor['mname'][0]}. ${widget.doctor['lname']}',
                       fontSize: 16,
                       fontFamily: 'Bold',
                     ),
@@ -51,8 +70,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/images/doc1.png',
+                        Image.network(
+                          widget.doctor['profilePicture'],
                           height: 100,
                         ),
                         const SizedBox(
@@ -63,7 +82,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextWidget(
-                              text: 'Dr. John Rivera',
+                              text:
+                                  'Dr. ${widget.doctor['fname']} ${widget.doctor['mname'][0]}. ${widget.doctor['lname']}',
                               fontSize: 14,
                               fontFamily: 'Bold',
                             ),
@@ -71,7 +91,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               height: 5,
                             ),
                             TextWidget(
-                              text: 'Neurologist',
+                              text: widget.doctor['type'],
                               fontSize: 12,
                               fontFamily: 'Regular',
                             ),
@@ -102,7 +122,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 fontSize: 12,
                               ),
                               TextWidget(
-                                text: 'January 01, 2001 | 09:00AM',
+                                text: '${widget.date} | ${widget.time}',
                                 fontSize: 12,
                                 fontFamily: 'Bold',
                               ),
@@ -222,6 +242,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     label: 'Confirm',
                     onPressed: () {
                       showToast('You have successfully booked a consultation!');
+
+                      addBooking(
+                          widget.name,
+                          widget.date,
+                          widget.time,
+                          widget.gender,
+                          widget.age,
+                          widget.problem,
+                          widget.doctor.id);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const HomeTab()));
                     },

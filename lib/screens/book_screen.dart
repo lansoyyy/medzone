@@ -8,7 +8,9 @@ import '../utils/colors.dart';
 import '../widgets/button_widget.dart';
 
 class BookScreen extends StatefulWidget {
-  const BookScreen({super.key});
+  var doctor;
+
+  BookScreen({super.key, required this.doctor});
 
   @override
   State<BookScreen> createState() => _BookScreenState();
@@ -341,7 +343,15 @@ class _BookScreenState extends State<BookScreen> {
                     label: 'Book',
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const SummaryScreen()));
+                          builder: (context) => SummaryScreen(
+                                age: ageController.text,
+                                date: dateController.text,
+                                gender: selectedGender,
+                                name: nameController.text,
+                                problem: problemController.text,
+                                time: timeController.text,
+                                doctor: widget.doctor,
+                              )));
                     },
                   ),
                 ),

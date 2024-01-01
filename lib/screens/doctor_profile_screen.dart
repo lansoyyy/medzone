@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medzone/screens/book_screen.dart';
 import 'package:medzone/utils/colors.dart';
@@ -5,7 +6,9 @@ import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
 
 class DoctorProfileScreen extends StatefulWidget {
-  const DoctorProfileScreen({super.key});
+  String id;
+
+  DoctorProfileScreen({super.key, required this.id});
 
   @override
   State<DoctorProfileScreen> createState() => _DoctorProfileScreenState();
@@ -14,301 +17,324 @@ class DoctorProfileScreen extends StatefulWidget {
 class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
+        .collection('Doctors')
+        .doc(widget.id)
+        .snapshots();
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
+      body: StreamBuilder<DocumentSnapshot>(
+          stream: userData,
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox();
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Something went wrong'));
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox();
+            }
+            dynamic data = snapshot.data;
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back,
+                            ),
+                          ),
+                          TextWidget(
+                            text:
+                                'Dr. ${data['fname']} ${data['mname'][0]}. ${data['lname']}',
+                            fontSize: 16,
+                            fontFamily: 'Bold',
+                          ),
+                        ],
                       ),
-                    ),
-                    TextWidget(
-                      text: 'Dr. John Rivera',
-                      fontSize: 16,
-                      fontFamily: 'Bold',
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Card(
-                  child: SizedBox(
-                    height: 150,
-                    width: 400,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/doc1.png',
-                          height: 100,
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextWidget(
-                              text: 'Dr. John Rivera',
-                              fontSize: 14,
-                              fontFamily: 'Bold',
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextWidget(
-                              text: 'Neurologist',
-                              fontSize: 12,
-                              fontFamily: 'Regular',
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: primary.withOpacity(0.1),
-                          ),
-                          child: Icon(
-                            Icons.star,
-                            color: primary,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 2.5,
-                        ),
-                        TextWidget(
-                          text: '4.5',
-                          fontSize: 14,
-                          fontFamily: 'Bold',
-                        ),
-                        const SizedBox(
-                          height: 2.5,
-                        ),
-                        TextWidget(
-                          text: 'Ratings',
-                          fontSize: 10,
-                          fontFamily: 'Regular',
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: primary.withOpacity(0.1),
-                          ),
-                          child: Icon(
-                            Icons.rate_review,
-                            color: primary,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 2.5,
-                        ),
-                        TextWidget(
-                          text: '50',
-                          fontSize: 14,
-                          fontFamily: 'Bold',
-                        ),
-                        const SizedBox(
-                          height: 2.5,
-                        ),
-                        TextWidget(
-                          text: 'Reviews',
-                          fontSize: 10,
-                          fontFamily: 'Regular',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextWidget(
-                  text: 'About Me',
-                  fontSize: 18,
-                  fontFamily: 'Bold',
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                TextWidget(
-                  align: TextAlign.start,
-                  text:
-                      'Ea do magna velit est ex. Ad ut magna ea aliqua consectetur proident qui do exercitation fugiat. Laborum nisi consequat reprehenderit aliqua. Incididunt sint eu ut eiusmod labore Lorem nisi anim sit non proident labore.',
-                  fontSize: 12,
-                  fontFamily: 'Regular',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextWidget(
-                  text: 'Reviews',
-                  fontSize: 18,
-                  fontFamily: 'Bold',
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                SizedBox(
-                  height: 200,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < 5; i++)
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Card(
+                        child: SizedBox(
+                          height: 150,
+                          width: 400,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                              Image.network(
+                                data['profilePicture'],
+                                width: 75,
+                              ),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image.asset(
-                                    'assets/images/profile.png',
-                                    height: 45,
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
                                   TextWidget(
-                                    text: 'John Doe',
+                                    text:
+                                        'Dr. ${data['fname']} ${data['mname'][0]}. ${data['lname']}',
                                     fontSize: 14,
                                     fontFamily: 'Bold',
                                   ),
-                                  const Expanded(
-                                    child: SizedBox(
-                                      width: 20,
-                                    ),
+                                  const SizedBox(
+                                    height: 5,
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: primary.withOpacity(0.1),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(3.0),
-                                          child: Column(
-                                            children: [
-                                              Icon(
-                                                Icons.star,
-                                                color: primary,
-                                              ),
-                                              TextWidget(
-                                                text: '4.5',
-                                                fontSize: 12,
-                                                fontFamily: 'Bold',
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  TextWidget(
+                                    text: '${data['type']}',
+                                    fontSize: 12,
+                                    fontFamily: 'Regular',
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              TextWidget(
-                                align: TextAlign.start,
-                                text:
-                                    'Ea do magna velit est ex. Ad ut magna ea aliqua consectetur proident qui do exercitation fugiat. Laborum nisi consequat reprehenderit aliqua. Incididunt sint eu ut eiusmod labore Lorem nisi anim sit non proident labore.',
-                                fontSize: 12,
-                                fontFamily: 'Regular',
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: TextWidget(
-                                  align: TextAlign.end,
-                                  text: '3 days ago',
-                                  fontSize: 12,
-                                  fontFamily: 'Bold',
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: primary.withOpacity(0.1),
+                                ),
+                                child: Icon(
+                                  Icons.star,
+                                  color: primary,
                                 ),
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 2.5,
                               ),
-                              const Divider(
-                                color: Colors.grey,
-                                thickness: 0.5,
+                              TextWidget(
+                                text: '${data['stars']}',
+                                fontSize: 14,
+                                fontFamily: 'Bold',
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 2.5,
+                              ),
+                              TextWidget(
+                                text: 'Ratings',
+                                fontSize: 10,
+                                fontFamily: 'Regular',
                               ),
                             ],
                           ),
-                      ],
-                    ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: primary.withOpacity(0.1),
+                                ),
+                                child: Icon(
+                                  Icons.rate_review,
+                                  color: primary,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 2.5,
+                              ),
+                              TextWidget(
+                                text: data['reviews'].length.toString(),
+                                fontSize: 14,
+                                fontFamily: 'Bold',
+                              ),
+                              const SizedBox(
+                                height: 2.5,
+                              ),
+                              TextWidget(
+                                text: 'Reviews',
+                                fontSize: 10,
+                                fontFamily: 'Regular',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextWidget(
+                        text: 'About Me',
+                        fontSize: 18,
+                        fontFamily: 'Bold',
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextWidget(
+                        align: TextAlign.start,
+                        text: data['aboutme'],
+                        fontSize: 12,
+                        fontFamily: 'Regular',
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextWidget(
+                        text: 'Reviews',
+                        fontSize: 18,
+                        fontFamily: 'Bold',
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (int i = 0; i < data['reviews'].length; i++)
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/profile.png',
+                                          height: 45,
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        TextWidget(
+                                          text: 'John Doe',
+                                          fontSize: 14,
+                                          fontFamily: 'Bold',
+                                        ),
+                                        const Expanded(
+                                          child: SizedBox(
+                                            width: 20,
+                                          ),
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height: 50,
+                                              width: 50,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: primary.withOpacity(0.1),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(3.0),
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: primary,
+                                                    ),
+                                                    TextWidget(
+                                                      text: '4.5',
+                                                      fontSize: 12,
+                                                      fontFamily: 'Bold',
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextWidget(
+                                      align: TextAlign.start,
+                                      text:
+                                          'Ea do magna velit est ex. Ad ut magna ea aliqua consectetur proident qui do exercitation fugiat. Laborum nisi consequat reprehenderit aliqua. Incididunt sint eu ut eiusmod labore Lorem nisi anim sit non proident labore.',
+                                      fontSize: 12,
+                                      fontFamily: 'Regular',
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: TextWidget(
+                                        align: TextAlign.end,
+                                        text: '3 days ago',
+                                        fontSize: 12,
+                                        fontFamily: 'Bold',
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                      thickness: 0.5,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ButtonWidget(
+                          radius: 100,
+                          label: 'Book an Appointment',
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => BookScreen(
+                                      doctor: data,
+                                    )));
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
                   ),
                 ),
-                Center(
-                  child: ButtonWidget(
-                    radius: 100,
-                    label: 'Book an Appointment',
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const BookScreen()));
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+              ),
+            );
+          }),
     );
   }
 }

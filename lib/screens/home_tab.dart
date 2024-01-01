@@ -188,7 +188,9 @@ class _HomeTabState extends State<HomeTab> {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const DoctorProfileScreen()));
+                                                DoctorProfileScreen(
+                                                  id: data.docs[i].id,
+                                                )));
                                   },
                                   child: Container(
                                     height: 175,
