@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medzone/screens/doctor_profile_screen.dart';
+import 'package:medzone/screens/notif_page.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/text_widget.dart';
 import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
@@ -56,7 +57,10 @@ class _HomeTabState extends State<HomeTab> {
                       child: SizedBox(),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const NotifPage()));
+                      },
                       icon: const Icon(
                         Icons.notifications_sharp,
                       ),
