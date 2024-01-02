@@ -214,102 +214,118 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                           child: Column(
                             children: [
                               for (int i = 0; i < data['reviews'].length; i++)
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/profile.png',
-                                          height: 45,
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        TextWidget(
-                                          text: 'John Doe',
-                                          fontSize: 14,
-                                          fontFamily: 'Bold',
-                                        ),
-                                        const Expanded(
-                                          child: SizedBox(
-                                            width: 20,
-                                          ),
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              height: 50,
-                                              width: 50,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: primary.withOpacity(0.1),
+                                StreamBuilder<DocumentSnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .doc(data['reviews'][i]['myid'])
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<DocumentSnapshot>
+                                            snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return const SizedBox();
+                                      } else if (snapshot.hasError) {
+                                        return const Center(
+                                            child:
+                                                Text('Something went wrong'));
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const SizedBox();
+                                      }
+                                      dynamic users = snapshot.data;
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/images/profile.png',
+                                                height: 45,
                                               ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(3.0),
-                                                child: Column(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: primary,
-                                                    ),
-                                                    TextWidget(
-                                                      text: '4.5',
-                                                      fontSize: 12,
-                                                      fontFamily: 'Bold',
-                                                    ),
-                                                  ],
+                                              const SizedBox(
+                                                width: 20,
+                                              ),
+                                              TextWidget(
+                                                text:
+                                                    '${users['fname']} ${users['mname'][0]}. ${users['lname']}',
+                                                fontSize: 14,
+                                                fontFamily: 'Bold',
+                                              ),
+                                              const Expanded(
+                                                child: SizedBox(
+                                                  width: 20,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextWidget(
-                                      align: TextAlign.start,
-                                      text:
-                                          'Ea do magna velit est ex. Ad ut magna ea aliqua consectetur proident qui do exercitation fugiat. Laborum nisi consequat reprehenderit aliqua. Incididunt sint eu ut eiusmod labore Lorem nisi anim sit non proident labore.',
-                                      fontSize: 12,
-                                      fontFamily: 'Regular',
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: TextWidget(
-                                        align: TextAlign.end,
-                                        text: '3 days ago',
-                                        fontSize: 12,
-                                        fontFamily: 'Bold',
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    const Divider(
-                                      color: Colors.grey,
-                                      thickness: 0.5,
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
-                                ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: primary
+                                                          .withOpacity(0.1),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3.0),
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: primary,
+                                                          ),
+                                                          TextWidget(
+                                                            text:
+                                                                data['reviews']
+                                                                            [i][
+                                                                        'stars']
+                                                                    .toString(),
+                                                            fontSize: 12,
+                                                            fontFamily: 'Bold',
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          TextWidget(
+                                            align: TextAlign.start,
+                                            text: data['reviews'][i]['comment'],
+                                            fontSize: 12,
+                                            fontFamily: 'Regular',
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            thickness: 0.5,
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      );
+                                    }),
                             ],
                           ),
                         ),
