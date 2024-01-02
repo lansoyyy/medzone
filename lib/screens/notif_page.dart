@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:medzone/widgets/text_widget.dart';
 
 import '../utils/colors.dart';
+import 'messages/chat_page.dart';
 
 class NotifPage extends StatelessWidget {
   const NotifPage({super.key});
@@ -59,83 +60,100 @@ class NotifPage extends StatelessWidget {
                         child: ListView.builder(
                           itemCount: data.docs.length,
                           itemBuilder: (context, index) {
-                            return StreamBuilder<DocumentSnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('Doctors')
-                                    .doc(data.docs[index]['doctorid'])
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const SizedBox();
-                                  } else if (snapshot.hasError) {
-                                    return const Center(
-                                        child: Text('Something went wrong'));
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const SizedBox();
-                                  }
-                                  dynamic doctor = snapshot.data;
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10),
-                                    child: Container(
-                                      height: 150,
-                                      width: 125,
-                                      decoration: BoxDecoration(
-                                        color: primary.withOpacity(0.25),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.network(
-                                            doctor['profilePicture'],
-                                            height: 100,
+                            return GestureDetector(
+                              onTap: () {},
+                              child: StreamBuilder<DocumentSnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('Doctors')
+                                      .doc(data.docs[index]['doctorid'])
+                                      .snapshots(),
+                                  builder: (context,
+                                      AsyncSnapshot<DocumentSnapshot>
+                                          snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const SizedBox();
+                                    } else if (snapshot.hasError) {
+                                      return const Center(
+                                          child: Text('Something went wrong'));
+                                    } else if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const SizedBox();
+                                    }
+                                    dynamic doctor = snapshot.data;
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) => ChatPage(
+                                                      driverId: data.docs[index]
+                                                          ['doctorid'],
+                                                      driverName:
+                                                          '${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
+                                                    )));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        child: Container(
+                                          height: 150,
+                                          width: 125,
+                                          decoration: BoxDecoration(
+                                            color: primary.withOpacity(0.25),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
                                           ),
-                                          const SizedBox(
-                                            width: 30,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                          child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
-                                              TextWidget(
-                                                text:
-                                                    'Dr. ${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
-                                                fontSize: 14,
-                                                fontFamily: 'Bold',
+                                              Image.network(
+                                                doctor['profilePicture'],
+                                                height: 100,
                                               ),
                                               const SizedBox(
-                                                height: 5,
+                                                width: 30,
                                               ),
-                                              TextWidget(
-                                                text:
-                                                    'has accepted your consultation',
-                                                fontSize: 12,
-                                                fontFamily: 'Regular',
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              TextWidget(
-                                                text:
-                                                    '@${data.docs[index]['date']} || ${data.docs[index]['time']}',
-                                                fontSize: 12,
-                                                fontFamily: 'Medium',
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  TextWidget(
+                                                    text:
+                                                        'Dr. ${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
+                                                    fontSize: 14,
+                                                    fontFamily: 'Bold',
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  TextWidget(
+                                                    text:
+                                                        'has accepted your consultation',
+                                                    fontSize: 12,
+                                                    fontFamily: 'Regular',
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  TextWidget(
+                                                    text:
+                                                        '@${data.docs[index]['date']} || ${data.docs[index]['time']}',
+                                                    fontSize: 12,
+                                                    fontFamily: 'Medium',
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                });
+                                    );
+                                  }),
+                            );
                           },
                         ),
                       );

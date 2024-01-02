@@ -56,15 +56,45 @@ class _HomeTabState extends State<HomeTab> {
                     const Expanded(
                       child: SizedBox(),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const NotifPage()));
-                      },
-                      icon: const Icon(
-                        Icons.notifications_sharp,
-                      ),
-                    ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Bookings')
+                            .where('status', isEqualTo: 'Completed')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return const Center(child: Text('Error'));
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 50),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.black,
+                              )),
+                            );
+                          }
+
+                          final data = snapshot.requireData;
+                          return IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const NotifPage()));
+                            },
+                            icon: Badge(
+                              label: TextWidget(
+                                  text: data.docs.length.toString(),
+                                  color: Colors.white,
+                                  fontSize: 12),
+                              child: const Icon(
+                                Icons.notifications_sharp,
+                              ),
+                            ),
+                          );
+                        }),
                   ],
                 ),
                 const SizedBox(
