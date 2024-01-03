@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medzone/screens/doctor_profile_screen.dart';
 import 'package:medzone/screens/notif_page.dart';
 import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/text_widget.dart';
 import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
+
+import 'doctor_profile_screen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -24,8 +25,11 @@ class _HomeTabState extends State<HomeTab> {
     'Dentist',
     'Neurologist',
   ];
+
+  String selectedChip = 'All';
   @override
   Widget build(BuildContext context) {
+    print(selectedChip);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -148,32 +152,44 @@ class _HomeTabState extends State<HomeTab> {
                     children: selectedStatus.map((String status) {
                       return Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: FilterChip(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100)),
-                          showCheckmark: false,
-                          backgroundColor: const Color(0xFFC6C6C6),
-                          disabledColor: Colors.grey,
-                          selectedColor: primary,
-                          label: TextWidget(
-                            text: status,
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                          selected: selectedStatus.contains(status),
-                          onSelected: (bool selected) {
-                            setState(
-                              () {
-                                if (selected) {
-                                  selectedStatus
-                                      .add(status); // Update the temporary list
-                                } else {
-                                  // selectedStatus
-                                  //     .remove(status); // Update the temporary list
-                                }
-                              },
-                            );
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedChip = status;
+                            });
+
+                            print('asdadsd');
                           },
+                          child: FilterChip(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                              side: BorderSide(
+                                color: selectedChip == status
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                width: 2.0,
+                              ),
+                            ),
+                            showCheckmark: false,
+                            backgroundColor: const Color(0xFFC6C6C6),
+                            disabledColor: Colors.grey,
+                            selectedColor: Colors.blue,
+                            label: Text(
+                              status,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                            selected: selectedChip == status,
+                            onSelected: (bool selected) {
+                              print('asdadsd');
+                              setState(() {
+                                selectedChip = status;
+                              });
+                              // This can be an empty callback since we're handling onTap separately
+                            },
+                          ),
                         ),
                       );
                     }).toList(),
@@ -183,15 +199,26 @@ class _HomeTabState extends State<HomeTab> {
                   height: 20,
                 ),
                 StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Doctors')
-                        .where('fname',
-                            isGreaterThanOrEqualTo:
-                                toBeginningOfSentenceCase(nameSearched))
-                        .where('fname',
-                            isLessThan:
-                                '${toBeginningOfSentenceCase(nameSearched)}z')
-                        .snapshots(),
+                    stream: selectedChip == 'All'
+                        ? FirebaseFirestore.instance
+                            .collection('Doctors')
+                            .where('fname',
+                                isGreaterThanOrEqualTo:
+                                    toBeginningOfSentenceCase(nameSearched))
+                            .where('fname',
+                                isLessThan:
+                                    '${toBeginningOfSentenceCase(nameSearched)}z')
+                            .snapshots()
+                        : FirebaseFirestore.instance
+                            .collection('Doctors')
+                            .where('type', isEqualTo: selectedChip)
+                            .where('fname',
+                                isGreaterThanOrEqualTo:
+                                    toBeginningOfSentenceCase(nameSearched))
+                            .where('fname',
+                                isLessThan:
+                                    '${toBeginningOfSentenceCase(nameSearched)}z')
+                            .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasError) {
