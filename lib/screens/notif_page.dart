@@ -88,7 +88,7 @@ class NotifPage extends StatelessWidget {
                                                       driverId: data.docs[index]
                                                           ['doctorid'],
                                                       driverName:
-                                                          '${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
+                                                          '${doctor['fname']}  ${doctor['lname']}',
                                                     )));
                                       },
                                       child: Padding(
@@ -123,7 +123,7 @@ class NotifPage extends StatelessWidget {
                                                 children: [
                                                   TextWidget(
                                                     text:
-                                                        'Dr. ${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
+                                                        'Dr. ${doctor['fname']}  ${doctor['lname']}',
                                                     fontSize: 14,
                                                     fontFamily: 'Bold',
                                                   ),

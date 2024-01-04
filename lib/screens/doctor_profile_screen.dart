@@ -52,8 +52,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                             ),
                           ),
                           TextWidget(
-                            text:
-                                'Dr. ${data['fname']} ${data['mname'][0]}. ${data['lname']}',
+                            text: 'Dr. ${data['fname']}  ${data['lname']}',
                             fontSize: 16,
                             fontFamily: 'Bold',
                           ),
@@ -83,7 +82,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                 children: [
                                   TextWidget(
                                     text:
-                                        'Dr. ${data['fname']} ${data['mname'][0]}. ${data['lname']}',
+                                        'Dr. ${data['fname']}  ${data['lname']}',
                                     fontSize: 14,
                                     fontFamily: 'Bold',
                                   ),
@@ -245,16 +244,20 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              Image.asset(
-                                                'assets/images/profile.png',
-                                                height: 45,
+                                              GestureDetector(
+                                                child: CircleAvatar(
+                                                  minRadius: 75,
+                                                  maxRadius: 75,
+                                                  backgroundImage: NetworkImage(
+                                                      users['profilePicture']),
+                                                ),
                                               ),
                                               const SizedBox(
                                                 width: 20,
                                               ),
                                               TextWidget(
                                                 text:
-                                                    '${users['fname']} ${users['mname'][0]}. ${users['lname']}',
+                                                    '${users['fname']}  ${users['lname']}',
                                                 fontSize: 14,
                                                 fontFamily: 'Bold',
                                               ),

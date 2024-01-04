@@ -225,9 +225,14 @@ class _AppointmentsTabState extends State<AppointmentsTab> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 children: [
-                                                  Image.network(
-                                                    doctor['profilePicture'],
-                                                    height: 100,
+                                                  GestureDetector(
+                                                    child: CircleAvatar(
+                                                      minRadius: 50,
+                                                      maxRadius: 50,
+                                                      backgroundImage:
+                                                          NetworkImage(doctor[
+                                                              'profilePicture']),
+                                                    ),
                                                   ),
                                                   const SizedBox(
                                                     width: 30,
@@ -242,7 +247,7 @@ class _AppointmentsTabState extends State<AppointmentsTab> {
                                                     children: [
                                                       TextWidget(
                                                         text:
-                                                            'Dr. ${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
+                                                            'Dr. ${doctor['fname']}  ${doctor['lname']}',
                                                         fontSize: 14,
                                                         fontFamily: 'Bold',
                                                       ),

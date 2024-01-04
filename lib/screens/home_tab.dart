@@ -266,9 +266,13 @@ class _HomeTabState extends State<HomeTab> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Image.network(
-                                          data.docs[i]['profilePicture'],
-                                          width: 75,
+                                        GestureDetector(
+                                          child: CircleAvatar(
+                                            minRadius: 35,
+                                            maxRadius: 35,
+                                            backgroundImage: NetworkImage(
+                                                data.docs[i]['profilePicture']),
+                                          ),
                                         ),
                                         const SizedBox(
                                           height: 10,
@@ -283,7 +287,7 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                         TextWidget(
                                           text:
-                                              'Dr. ${data.docs[i]['fname']} ${data.docs[i]['mname'][0]}. ${data.docs[i]['lname']}',
+                                              'Dr. ${data.docs[i]['fname']}  ${data.docs[i]['lname']}',
                                           fontSize: 12,
                                           fontFamily: 'Bold',
                                         ),
@@ -375,9 +379,13 @@ class _HomeTabState extends State<HomeTab> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Image.network(
-                                            doctor['profilePicture'],
-                                            height: 100,
+                                          GestureDetector(
+                                            child: CircleAvatar(
+                                              minRadius: 50,
+                                              maxRadius: 50,
+                                              backgroundImage: NetworkImage(
+                                                  doctor['profilePicture']),
+                                            ),
                                           ),
                                           const SizedBox(
                                             width: 30,
@@ -390,7 +398,7 @@ class _HomeTabState extends State<HomeTab> {
                                             children: [
                                               TextWidget(
                                                 text:
-                                                    'Dr. ${doctor['fname']} ${doctor['mname'][0]}. ${doctor['lname']}',
+                                                    'Dr. ${doctor['fname']}  ${doctor['lname']}',
                                                 fontSize: 14,
                                                 fontFamily: 'Bold',
                                               ),

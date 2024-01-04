@@ -53,7 +53,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     ),
                     TextWidget(
                       text:
-                          'Dr. ${widget.doctor['fname']} ${widget.doctor['mname'][0]}. ${widget.doctor['lname']}',
+                          'Dr. ${widget.doctor['fname']} ${widget.doctor['lname']}',
                       fontSize: 16,
                       fontFamily: 'Bold',
                     ),
@@ -83,7 +83,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           children: [
                             TextWidget(
                               text:
-                                  'Dr. ${widget.doctor['fname']} ${widget.doctor['mname'][0]}. ${widget.doctor['lname']}',
+                                  'Dr. ${widget.doctor['fname']} ${widget.doctor['lname']}',
                               fontSize: 14,
                               fontFamily: 'Bold',
                             ),
