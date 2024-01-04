@@ -137,7 +137,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              uploadPicture('camera');
+                              uploadPicture('gallery');
                             },
                             child: CircleAvatar(
                               minRadius: 75,
