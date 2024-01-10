@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medzone/screens/notif_page.dart';
 import 'package:medzone/utils/colors.dart';
@@ -24,12 +25,20 @@ class _HomeTabState extends State<HomeTab> {
     'Nutritionist',
     'Dentist',
     'Neurologist',
+    'Dermatologist',
+    'Pediatrician',
+    'Psychiatrist',
+    'Cardiologist',
   ];
 
   String selectedChip = 'All';
   @override
   Widget build(BuildContext context) {
-    print(selectedChip);
+    final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -41,22 +50,37 @@ class _HomeTabState extends State<HomeTab> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        TextWidget(
-                          text: 'Hello User!',
-                          fontSize: 18,
-                          fontFamily: 'Bold',
-                        ),
-                        TextWidget(
-                          text: 'Keep taking care of your health',
-                          fontSize: 10,
-                          fontFamily: 'Regular',
-                        ),
-                      ],
-                    ),
+                    StreamBuilder<DocumentSnapshot>(
+                        stream: userData,
+                        builder: (context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return const SizedBox();
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                                child: Text('Something went wrong'));
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox();
+                          }
+                          dynamic data = snapshot.data;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              TextWidget(
+                                text: 'Hello ',
+                                fontSize: 18,
+                                fontFamily: 'Bold',
+                              ),
+                              TextWidget(
+                                text: 'Keep taking care of your health',
+                                fontSize: 10,
+                                fontFamily: 'Regular',
+                              ),
+                            ],
+                          );
+                        }),
                     const Expanded(
                       child: SizedBox(),
                     ),
@@ -94,7 +118,7 @@ class _HomeTabState extends State<HomeTab> {
                                   color: Colors.white,
                                   fontSize: 12),
                               child: const Icon(
-                                Icons.notifications_sharp,
+                                Icons.message,
                               ),
                             ),
                           );
@@ -142,7 +166,7 @@ class _HomeTabState extends State<HomeTab> {
                   height: 20,
                 ),
                 TextWidget(
-                  text: 'Popular doctors',
+                  text: 'List of doctors',
                   fontSize: 14,
                   fontFamily: 'Bold',
                 ),

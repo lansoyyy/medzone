@@ -5,6 +5,12 @@ import 'package:medzone/utils/colors.dart';
 import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
 import 'package:medzone/widgets/textfield_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:medzone/widgets/toast_widget.dart';
+import 'package:path/path.dart' as path;
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:io';
 
 class SignupScreen2 extends StatefulWidget {
   var emailController = TextEditingController();
@@ -28,11 +34,83 @@ class _SignupScreen2State extends State<SignupScreen2> {
   final nicknameController = TextEditingController();
   final suffixController = TextEditingController();
 
+  final numberController = TextEditingController();
+
   String selectedSex = 'Male'; // Default selected sex
   String selectedGender = 'Male'; // Default selected gender
 
   final List<String> sexList = ['Male', 'Female', 'Other'];
   final List<String> genderList = ['Male', 'Female', 'Non-binary', 'Other'];
+
+  late String fileName = '';
+
+  late File imageFile;
+
+  late String imageURL = '';
+
+  Future<void> uploadPicture(String inputSource) async {
+    final picker = ImagePicker();
+    XFile pickedImage;
+    try {
+      pickedImage = (await picker.pickImage(
+          source: inputSource == 'camera'
+              ? ImageSource.camera
+              : ImageSource.gallery,
+          maxWidth: 1920))!;
+
+      fileName = path.basename(pickedImage.path);
+      imageFile = File(pickedImage.path);
+
+      try {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => const Padding(
+            padding: EdgeInsets.only(left: 30, right: 30),
+            child: AlertDialog(
+                title: Row(
+              children: [
+                CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'Loading . . .',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'QRegular'),
+                ),
+              ],
+            )),
+          ),
+        );
+
+        await firebase_storage.FirebaseStorage.instance
+            .ref('Users/$fileName')
+            .putFile(imageFile);
+        imageURL = await firebase_storage.FirebaseStorage.instance
+            .ref('Users/$fileName')
+            .getDownloadURL();
+
+        Navigator.of(context).pop();
+
+        setState(() {});
+
+        showToast('Image uploaded!');
+      } on firebase_storage.FirebaseException catch (error) {
+        if (kDebugMode) {
+          print(error);
+        }
+      }
+    } catch (err) {
+      if (kDebugMode) {
+        print(err);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +143,22 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 const SizedBox(
                   height: 20,
                 ),
-                Center(
-                  child: Image.asset(
-                    'assets/images/profile.png',
-                    width: 100,
-                  ),
+                GestureDetector(
+                  onTap: () {
+                    uploadPicture('gallery');
+                  },
+                  child: imageURL == ''
+                      ? Center(
+                          child: Image.asset(
+                            'assets/images/profile.png',
+                            width: 100,
+                          ),
+                        )
+                      : CircleAvatar(
+                          maxRadius: 50,
+                          minRadius: 50,
+                          backgroundImage: NetworkImage(imageURL),
+                        ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -114,8 +203,20 @@ class _SignupScreen2State extends State<SignupScreen2> {
                 const SizedBox(
                   height: 10,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Center(
                   child: TextFieldWidget(
+                    inputType: TextInputType.number,
+                    label: 'Contact Number',
+                    hintColor: Colors.black,
+                    controller: numberController,
+                  ),
+                ),
+                Center(
+                  child: TextFieldWidget(
+                    isRequred: false,
                     label: 'Suffix (Jr., I, II, III, Sr.)',
                     hintColor: Colors.black,
                     controller: suffixController,
@@ -295,6 +396,8 @@ class _SignupScreen2State extends State<SignupScreen2> {
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => SignupScreen3(
+                              numberController: numberController,
+                              profile: imageURL,
                               emailController: widget.emailController,
                               passwordController: widget.passwordController,
                               firstnameController: firstnameController,
@@ -335,8 +438,8 @@ class _SignupScreen2State extends State<SignupScreen2> {
         },
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2050));
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2008));
 
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);

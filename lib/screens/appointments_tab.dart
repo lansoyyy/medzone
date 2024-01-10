@@ -70,6 +70,9 @@ class _AppointmentsTabState extends State<AppointmentsTab> {
                                         : i == 1
                                             ? 'Completed'
                                             : 'Cancelled')
+                                .where('userId',
+                                    isEqualTo:
+                                        FirebaseAuth.instance.currentUser!.uid)
                                 .snapshots(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {

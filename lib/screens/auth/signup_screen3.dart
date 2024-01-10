@@ -20,8 +20,12 @@ class SignupScreen3 extends StatefulWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
+  var numberController = TextEditingController();
+
   String selectedSex = 'Male';
   String selectedGender = 'Male';
+
+  String profile = '';
 
   SignupScreen3(
       {super.key,
@@ -34,7 +38,9 @@ class SignupScreen3 extends StatefulWidget {
       required this.suffixController,
       required this.dateController,
       required this.selectedSex,
-      required this.selectedGender});
+      required this.selectedGender,
+      required this.profile,
+      required this.numberController});
 
   @override
   State<SignupScreen3> createState() => _SignupScreen3State();
@@ -379,7 +385,9 @@ class _SignupScreen3State extends State<SignupScreen3> {
           widget.suffixController.text,
           widget.dateController.text,
           widget.selectedSex,
-          widget.selectedGender);
+          widget.selectedGender,
+          widget.profile,
+          widget.numberController.text);
 
       showToast('Account created succesfully!');
       Navigator.of(context).pushReplacement(
