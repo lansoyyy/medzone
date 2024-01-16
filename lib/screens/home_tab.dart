@@ -88,6 +88,9 @@ class _HomeTabState extends State<HomeTab> {
                         stream: FirebaseFirestore.instance
                             .collection('Bookings')
                             .where('status', isEqualTo: 'Completed')
+                            .where('userId',
+                                isEqualTo:
+                                    FirebaseAuth.instance.currentUser!.uid)
                             .snapshots(),
                         builder: (BuildContext context,
                             AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -347,6 +350,8 @@ class _HomeTabState extends State<HomeTab> {
                     stream: FirebaseFirestore.instance
                         .collection('Bookings')
                         .where('status', isEqualTo: 'Pending')
+                        .where('userId',
+                            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
