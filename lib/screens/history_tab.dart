@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medzone/widgets/text_widget.dart';
 
@@ -35,6 +36,8 @@ class HistoryTab extends StatelessWidget {
                     stream: FirebaseFirestore.instance
                         .collection('Bookings')
                         .where('status', isEqualTo: 'Completed')
+                        .where('userId',
+                            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
