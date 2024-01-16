@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medzone/screens/auth/signup_screen.dart';
@@ -235,11 +236,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   login(context) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
-      showToast('Logged in succesfully!');
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.user!.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          showToast('Logged in succesfully!');
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
+        } else {
+          showToast('Cannot proceed!');
+        }
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showToast("No user found with that email.");
