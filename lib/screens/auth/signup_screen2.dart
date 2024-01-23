@@ -439,7 +439,7 @@ class _SignupScreen2State extends State<SignupScreen2> {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(1950),
-        lastDate: DateTime(2008));
+        lastDate: DateTime(2024));
 
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);

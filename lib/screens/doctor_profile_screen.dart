@@ -129,7 +129,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                 height: 2.5,
                               ),
                               TextWidget(
-                                text: '${data['stars']}',
+                                text:
+                                    '${data['stars'] / data['reviews'].length}',
                                 fontSize: 14,
                                 fontFamily: 'Bold',
                               ),

@@ -305,7 +305,8 @@ class _HomeTabState extends State<HomeTab> {
                                           height: 10,
                                         ),
                                         TextWidget(
-                                          text: '☆ ${data.docs[i]['stars']}',
+                                          text:
+                                              '☆ ${data.docs[i]['stars'] / data.docs[i]['reviews'].length}',
                                           fontSize: 10,
                                           color: Colors.black,
                                         ),
