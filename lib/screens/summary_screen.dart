@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medzone/screens/home_tab.dart';
+import 'package:medzone/screens/home_screen.dart';
 import 'package:medzone/services/add_booking.dart';
 import 'package:medzone/widgets/button_widget.dart';
 import 'package:medzone/widgets/text_widget.dart';
@@ -169,7 +169,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           widget.problem,
                           widget.doctor.id);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomeTab()));
+                          builder: (context) => const HomeScreen()));
                     },
                   ),
                 ),

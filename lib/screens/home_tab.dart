@@ -306,7 +306,7 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                         TextWidget(
                                           text:
-                                              '☆ ${data.docs[i]['stars'] / data.docs[i]['reviews'].length}',
+                                              '☆ ${(double.parse((data.docs[i]['stars'] / data.docs[i]['reviews'].length).toString()).toStringAsFixed(2))}',
                                           fontSize: 10,
                                           color: Colors.black,
                                         ),
