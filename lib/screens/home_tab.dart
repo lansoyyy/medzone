@@ -87,7 +87,7 @@ class _HomeTabState extends State<HomeTab> {
                     StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection('Bookings')
-                            .where('status', isEqualTo: 'Completed')
+                            // .where('status', isEqualTo: 'Completed')
                             .where('userId',
                                 isEqualTo:
                                     FirebaseAuth.instance.currentUser!.uid)

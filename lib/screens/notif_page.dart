@@ -36,7 +36,7 @@ class NotifPage extends StatelessWidget {
                 StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('Bookings')
-                        .where('status', isEqualTo: 'Completed')
+                        // .where('status', isEqualTo: 'Completed')
                         .where('userId',
                             isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                         .orderBy('dateTime', descending: true)
@@ -135,7 +135,7 @@ class NotifPage extends StatelessWidget {
                                                   ),
                                                   TextWidget(
                                                     text:
-                                                        'has accepted your consultation',
+                                                        'has ${data.docs[index]['status'] == 'Cancelled' ? 'Rejected' : data.docs[index]['status']} your consultation',
                                                     fontSize: 12,
                                                     fontFamily: 'Regular',
                                                   ),
